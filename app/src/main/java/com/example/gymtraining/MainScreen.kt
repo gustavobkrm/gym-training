@@ -56,7 +56,10 @@ fun MainScreen() {
             arguments = listOf(navArgument("dayName") { type = NavType.StringType })
         ) { backStackEntry ->
             val dayName = backStackEntry.arguments?.getString("dayName") ?: "Desconhecido"
-            EditGymDay(dayName = dayName)
+            EditGymDay(dayName = dayName, navController = navController)
+        }
+        composable("add_new_exercise") {
+            AddNewExercises(navController)
         }
     }
 }
