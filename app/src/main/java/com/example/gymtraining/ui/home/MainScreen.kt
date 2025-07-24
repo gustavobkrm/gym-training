@@ -1,4 +1,4 @@
-package com.example.gymtraining
+package com.example.gymtraining.ui.home
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
@@ -34,34 +34,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
+import com.example.gymtraining.ui.newexercise.AddNewExercises
+import com.example.gymtraining.ui.listexercises.EditGymDay
+import com.example.gymtraining.R
 
 @Composable
-fun MainScreen() {
-    val navController = rememberNavController()
-
-    NavHost(
-        navController = navController,
-        startDestination = "home",
-        enterTransition = { fadeIn(animationSpec = tween(500)) + slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500))},
-        exitTransition = { fadeOut(animationSpec = tween(500)) + slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500))},
-        popEnterTransition = { fadeIn(animationSpec = tween(500)) + slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500))},
-        popExitTransition = { fadeOut(animationSpec = tween(500)) + slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500))}
-    ) {
-        composable("home") {
-            MainContent(navController = navController)
-        }
-
-        composable(
-            "edit_day/{dayName}",
-            arguments = listOf(navArgument("dayName") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val dayName = backStackEntry.arguments?.getString("dayName") ?: "Desconhecido"
-            EditGymDay(dayName = dayName, navController = navController)
-        }
-        composable("add_new_exercise") {
-            AddNewExercises(navController)
-        }
-    }
+fun MainScreen(
+    state: MainScreenUiState,
+    onClickAbreDia: (Long) -> Unit = {},
+) {
+    MainContent(onClickAbreDia = onClickAbreDia)
 }
 
 @Composable
@@ -85,7 +67,14 @@ fun ShapeableImage(
 }
 
 @Composable
-fun MainContent(navController: NavHostController) {
+fun MainContent(onClickAbreDia: (Long) -> Unit) {
+
+    val diasDaSemana = listOf(
+        1L to "Segunda-feira",
+        2L to "Terça-feira",
+        3L to "Quarta-feira",
+        4L to "Quinta-feira"
+    )
 
     val balooFontFamily = FontFamily(
         Font(R.font.baloo, weight = FontWeight.Normal)
@@ -143,20 +132,20 @@ fun MainContent(navController: NavHostController) {
                 .padding(horizontal = 16.dp)
 
         ) {
-            DayItem(dayName = "Segunda-feira", navController = navController)
-            Spacer(modifier = Modifier.height(25.dp))
-            DayItem(dayName = "Terça-feira", navController = navController)
-            Spacer(modifier = Modifier.height(25.dp))
-            DayItem(dayName = "Quarta-feira", navController = navController)
-            Spacer(modifier = Modifier.height(25.dp))
-            DayItem(dayName = "Quinta-feira", navController = navController)
+            diasDaSemana.forEach { (id, nomeDia) ->
+                DayItem(
+                    dayName = nomeDia,
+                    onClick = { onClickAbreDia(id) }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
     }
 }
 @Composable
 fun DayItem(
     dayName: String,
-    navController: NavHostController,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -170,12 +159,9 @@ fun DayItem(
                 indication = rememberRipple(
                     color = Color(0xFFFF6600),
                     bounded = true
-                )
+                ),
+                onClick = onClick
             )
-            {
-                val encodedDay = java.net.URLEncoder.encode(dayName, "UTF-8")
-                navController.navigate("edit_day/$encodedDay")
-            }
             .background(
                 color = Color(0xFF99E0E0),
                 shape = RoundedCornerShape(15.dp)
