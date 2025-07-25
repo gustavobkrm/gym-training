@@ -15,6 +15,8 @@ class EditGymDayViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     init {
         viewModelScope.launch {
+
+
         }
     }
 }

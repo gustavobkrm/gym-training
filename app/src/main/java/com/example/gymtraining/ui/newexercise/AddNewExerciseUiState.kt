@@ -1,6 +1,9 @@
 package com.example.gymtraining.ui.newexercise
 
-data class AddNewExerciseUiState(
-    val isLoading: Boolean = false,
+import com.example.gymtraining.data.Category
+import com.example.gymtraining.data.Exercise
 
+data class AddNewExerciseUiState(
+    val selectedExercise: Exercise? = null,
+    val selectedDay: Long = 0
     )

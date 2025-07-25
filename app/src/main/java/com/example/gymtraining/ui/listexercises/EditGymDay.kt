@@ -32,7 +32,7 @@ import com.example.gymtraining.R
 import kotlinx.coroutines.delay
 
 @Composable
-fun EditGymDay(state: EditGymDayUiState) {
+fun EditGymDay(state: EditGymDayUiState, dayId: Long) {
     val balooFontFamily = FontFamily(
         Font(R.font.baloo, weight = FontWeight.Normal)
     )
@@ -54,15 +54,14 @@ fun EditGymDay(state: EditGymDayUiState) {
         )
     }
     AddNewGymTraining(
-        onNavigate = state.onNavigateToAddNewExercise
+        onNavigate = {state.onNavigateToAddNewExercise(dayId) }
     )
 
-    /*if (!PossuiTreino(dayName))
-    AddNewGymTraining(navController)
-else
-    LoadListaGymTraining()
-*/
-    //AddNewGymTraining()
+    if (!state.possuiTreino) {
+        AddNewGymTraining(onNavigate = {state.onNavigateToAddNewExercise(dayId) })
+    } else {
+        //LoadListaGymTraining(dayName = state.dayName)
+    }
 
 
 }

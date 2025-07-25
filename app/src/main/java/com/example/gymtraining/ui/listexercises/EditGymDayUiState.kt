@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 data class EditGymDayUiState(
-    val onNavigateToAddNewExercise: () -> Unit = {}
+    val onNavigateToAddNewExercise: (Long) -> Unit = {},
+    val possuiTreino: Boolean = false
+
     )
 

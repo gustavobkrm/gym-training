@@ -1,8 +1,12 @@
 package com.example.gymtraining.navigation
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
@@ -11,7 +15,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.gymtraining.DestinosGymTraining
+import com.example.gymtraining.database.GymTrainingDatabase
 import com.example.gymtraining.ui.listexercises.EditGymDay
+import com.example.gymtraining.ui.listexercises.EditGymDayUiState
 import com.example.gymtraining.ui.listexercises.EditGymDayViewModel
 
 fun NavGraphBuilder.editGymDayGraph(
@@ -25,20 +31,29 @@ fun NavGraphBuilder.editGymDayGraph(
             val viewModel = hiltViewModel<EditGymDayViewModel>()
             val state by viewModel.uiState.collectAsState()
 
-            val onNavigateToAddNewExercise = {
+            val onNavigateToAddNewExercise: (Long) -> Unit = { dayId ->
                 navController.navigate(
                     DestinosGymTraining.NewExercises.rota.replace("{dayId}", dayId.toString())
                 )
             }
 
-            val scope = rememberCoroutineScope()
             val context = LocalContext.current
+            val dao = remember { GymTrainingDatabase.getDatabase(context).trainingDayExerciseCrossRefDao() }
+            var possuiTreino by remember { mutableStateOf<Boolean?>(null) }
 
-            EditGymDay(
-                state = state.copy(
-                    onNavigateToAddNewExercise = onNavigateToAddNewExercise
+            LaunchedEffect(dayId) {
+                possuiTreino = dao.hasExercisesForDay(dayId)
+            }
+
+            if (possuiTreino != null) {
+                EditGymDay(
+                    state = EditGymDayUiState(
+                        onNavigateToAddNewExercise = onNavigateToAddNewExercise,
+                        possuiTreino = possuiTreino!!
+                    ),
+                    dayId = dayId
                 )
-            )
+            }
         }
     }
 

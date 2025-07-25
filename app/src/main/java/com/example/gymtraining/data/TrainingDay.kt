@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class TrainingDay(
     @PrimaryKey(autoGenerate = true)
     val trainingDayId: Long = 0,
-    val dayOfWeek: String // exemplo: "segunda", "terça", etc.
+    val dayOfWeek: String
 )

@@ -11,4 +11,6 @@ interface TrainingDayExerciseCrossRefDAO {
     suspend fun insert(crossRef: TrainingDayExerciseCrossRef)
     @Query("SELECT * FROM training_day_exercise_cross_ref WHERE trainingDayId = :trainingDayId")
     suspend fun getExercisesForDay(trainingDayId: Long): List<TrainingDayExerciseCrossRef>
+    @Query("SELECT EXISTS(SELECT 1 FROM training_day_exercise_cross_ref WHERE trainingDayId = :trainingDayId)")
+    suspend fun hasExercisesForDay(trainingDayId: Long): Boolean
 }
