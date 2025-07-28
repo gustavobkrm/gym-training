@@ -97,10 +97,7 @@ fun AddNewExercises(
                     .background(Color.White, RoundedCornerShape(20.dp))
                     .clickable (
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = rememberRipple(
-                            color = Color(0xFFFF6600),
-                            bounded = true
-                        )
+                        indication = null
                     ) { expanded = !expanded }
                     .padding(12.dp)
             ) {
@@ -165,8 +162,6 @@ fun AddNewExercises(
                 )
             }
         }
-
-        // Você pode continuar a interface abaixo...
     }
 
     Log.d("UI", "AddNewExercises: entrou")

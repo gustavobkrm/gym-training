@@ -156,10 +156,7 @@ fun DayItem(
             .padding(5.dp)
             .clickable(
                 interactionSource = interactionSource,
-                indication = rememberRipple(
-                    color = Color(0xFFFF6600),
-                    bounded = true
-                ),
+                indication = null,  // remove o ripple
                 onClick = onClick
             )
             .background(

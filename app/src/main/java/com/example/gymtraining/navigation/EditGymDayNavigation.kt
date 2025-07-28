@@ -47,7 +47,7 @@ fun NavGraphBuilder.editGymDayGraph(
 
             if (possuiTreino != null) {
                 EditGymDay(
-                    state = EditGymDayUiState(
+                    state = state.copy(
                         onNavigateToAddNewExercise = onNavigateToAddNewExercise,
                         possuiTreino = possuiTreino!!
                     ),

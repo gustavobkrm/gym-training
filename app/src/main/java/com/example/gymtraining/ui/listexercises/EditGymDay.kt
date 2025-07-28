@@ -1,5 +1,6 @@
 package com.example.gymtraining.ui.listexercises
 
+import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -53,14 +54,10 @@ fun EditGymDay(state: EditGymDayUiState, dayId: Long) {
             maxLines = 1
         )
     }
-    AddNewGymTraining(
-        onNavigate = {state.onNavigateToAddNewExercise(dayId) }
-    )
-
     if (!state.possuiTreino) {
         AddNewGymTraining(onNavigate = {state.onNavigateToAddNewExercise(dayId) })
     } else {
-        //LoadListaGymTraining(dayName = state.dayName)
+        LoadListaGymTraining(state)
     }
 
 
@@ -80,13 +77,14 @@ fun AddNewGymTraining(onNavigate: () -> Unit) {
                 .size(250.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(
-                        color = Color(0xFF99E0E0),
-                        bounded = true
-                    )
+                    indication = null
                 ) {
                     onNavigate()
                 }
         )
     }
+}
+@Composable
+fun LoadListaGymTraining(state: EditGymDayUiState,) {
+    Log.d("teste", "LoadListaGymTraining: ${state.exerciciosDoDia}")
 }

@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.gymtraining.data.Category
 import com.example.gymtraining.data.Exercise
 import com.example.gymtraining.data.TrainingDay
+import com.example.gymtraining.data.TrainingDayExerciseCrossRef
 import com.example.gymtraining.database.GymTrainingDatabase
 import com.example.gymtraining.ui.home.MainScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +26,7 @@ class MainActivity : ComponentActivity() {
         val categoryDao = GymTrainingDatabase.getDatabase(this).categoryDao()
         val exerciseDao = GymTrainingDatabase.getDatabase(this).exerciseDao()
         val trainingDay = GymTrainingDatabase.getDatabase(this).trainingDayDao()
+        val trainingDayExerciseCrossRef = GymTrainingDatabase.getDatabase(this).trainingDayExerciseCrossRefDao()
 
         CoroutineScope(IO).launch {
             /*categoryDao.deleteAll()
@@ -117,7 +119,18 @@ class MainActivity : ComponentActivity() {
             )
             trainingDay.insertAll(trainingDays)
 
-             */
+
+            val segunda = trainingDay.getTrainingDays().first { it.dayOfWeek == "Segunda-feira" }
+            val exercises = exerciseDao.getExercises()
+            val supinoReto = exercises.first { it.nome == "Supino Reto halteres" }
+            val crossRef = TrainingDayExerciseCrossRef(
+                trainingDayId = segunda.trainingDayId,
+                exerciseId = supinoReto.exerciseId
+            )
+            trainingDayExerciseCrossRef.insert(crossRef)
+
+*/
+
         }
 
         setContent {
